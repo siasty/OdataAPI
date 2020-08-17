@@ -85,12 +85,18 @@ namespace OdataAPI
             {
                 var db = serviceScope.ServiceProvider.GetRequiredService<TestDbContext>();
 
-                db.Suppliers.AddRange(new List<Supplier> { 
+                if (db.Database.EnsureCreated())
+                {
+                    if (!db.Suppliers.Any())
+                    {
+                        db.Suppliers.AddRange(new List<Supplier> {
                         new Supplier { Id = 1, Name = "Stonka", Products =  new List<Product> {CreateNewProduct(1,"Cola", 130, "drink",1), CreateNewProduct(2,"Fanta", 140, "drink", 1) } },
                         new Supplier { Id = 2, Name = "Biedronka", Products =  new List<Product> {CreateNewProduct(3,"Pepsi", 130, "drink",2), CreateNewProduct(4,"Sprajt", 40, "drink", 2) } },
 
-                });
-                db.SaveChanges();
+                         });
+                        db.SaveChanges();
+                    }
+                }
             }
 
 
@@ -109,7 +115,7 @@ namespace OdataAPI
             return odataBuilder.GetEdmModel();
         }
 
-        static Product CreateNewProduct(int id,string name, decimal price, string categ, int SupplierId)
+        public static Product CreateNewProduct(int id,string name, decimal price, string categ, int SupplierId)
         {
             return new Product
             {
