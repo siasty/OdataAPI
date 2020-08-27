@@ -5,7 +5,9 @@ VisualStudioVersion = 16.0.30404.54
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "OdataAPI", "OdataAPI\OdataAPI.csproj", "{19A904AC-5A30-4E1D-938D-67DD87DBB591}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UnitTestOdataV4", "UnitTestOdataV4\UnitTestOdataV4.csproj", "{BA58FDFB-2D23-4C74-BDEA-CE1FD9825242}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "UnitTestOdataV4", "UnitTestOdataV4\UnitTestOdataV4.csproj", "{BA58FDFB-2D23-4C74-BDEA-CE1FD9825242}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Ui5", "..\Ui5\Ui5\Ui5.csproj", "{D4381072-6B56-4DFF-A2EA-29E4F8E5A311}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -21,6 +23,10 @@ Global
 		{BA58FDFB-2D23-4C74-BDEA-CE1FD9825242}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{BA58FDFB-2D23-4C74-BDEA-CE1FD9825242}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{BA58FDFB-2D23-4C74-BDEA-CE1FD9825242}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D4381072-6B56-4DFF-A2EA-29E4F8E5A311}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D4381072-6B56-4DFF-A2EA-29E4F8E5A311}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D4381072-6B56-4DFF-A2EA-29E4F8E5A311}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D4381072-6B56-4DFF-A2EA-29E4F8E5A311}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
