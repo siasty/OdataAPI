@@ -5,6 +5,7 @@ using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
 using Microsoft.AspNet.OData;
+using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
@@ -34,6 +35,7 @@ namespace OdataAPI.Controllers
         public virtual Product Product { get; set; }
     }
 
+
     public class ProductsController : ODataController
     {
         private readonly TestDbContext db;
@@ -53,6 +55,7 @@ namespace OdataAPI.Controllers
             IQueryable<Product> result = db.Products.Where(p => p.Id == key);
             return SingleResult.Create(result);
         }
+
 
         [HttpPost]
         public async Task<IActionResult> Post(Product product)

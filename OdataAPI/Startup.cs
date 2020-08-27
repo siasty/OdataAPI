@@ -27,6 +27,7 @@ namespace OdataAPI
 {
     public class Startup
     {
+
         public Startup(IConfiguration configuration)
         {
             Configuration = configuration;
@@ -39,6 +40,20 @@ namespace OdataAPI
             services.AddDbContext<TestDbContext>(opt => opt.UseInMemoryDatabase("Test"));
 
             services.AddControllers(mvcOptions => mvcOptions.EnableEndpointRouting = false);
+
+            services.AddCors(options =>
+            {
+                options.AddPolicy(
+                     "AllowAllOrigins",
+                      builder => builder
+                        .AllowAnyOrigin()
+                        .AllowAnyHeader()
+                        .AllowAnyMethod()
+                      //  .AllowCredentials()
+                        );
+
+                options.DefaultPolicyName = "AllowAllOrigins";
+            });
 
             services.AddOData();
             services.AddODataQueryFilter();
@@ -72,10 +87,11 @@ namespace OdataAPI
                 return next.Invoke();
             });
 
+            app.UseCors();
 
             app.UseMvc(routes =>
             {
-                routes.Select().Expand().Filter().OrderBy().MaxTop(null).Count().EnableContinueOnErrorHeader(); 
+                routes.Select().Expand().Filter().OrderBy().MaxTop(null).Count().EnableContinueOnErrorHeader();
                 routes.MapODataServiceRoute("odata", "odata", GetEdmModel(), new DefaultODataBatchHandler());
                 routes.EnableDependencyInjection();
             });
