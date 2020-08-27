@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNet.OData;
+using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using OdataAPI.Data;
@@ -18,6 +19,7 @@ namespace OdataAPI.Controllers
         public ICollection<Product> Products { get; set; }
     }
 
+    [EnableCors("UI5Policy")]
     public class SuppliersController : ODataController
     {
         private readonly TestDbContext db;
