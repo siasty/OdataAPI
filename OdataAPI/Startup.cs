@@ -74,7 +74,8 @@ namespace OdataAPI
                 app.UseDeveloperExceptionPage();
             }
 
-           // app.UseHttpsRedirection();
+            // app.UseHttpsRedirection();
+            app.UseODataBatching();
 
             app.UseRouting();
 
@@ -85,8 +86,7 @@ namespace OdataAPI
 
             app.UseAuthorization();
 
-            app.UseODataBatching();
-
+      
             app.Use((context, next) =>
             {
                 context.Response.Headers["OData-Version"] = "4.0";
