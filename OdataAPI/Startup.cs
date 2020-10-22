@@ -2,9 +2,6 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using Microsoft.AspNet.OData.Batch;
-using Microsoft.AspNet.OData.Builder;
-using Microsoft.AspNet.OData.Extensions;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.CookiePolicy;
 using Microsoft.AspNetCore.Hosting;
@@ -12,6 +9,8 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.HttpOverrides;
 using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.OData;
+using Microsoft.AspNetCore.OData.Batch;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Storage;
@@ -22,6 +21,8 @@ using Microsoft.Extensions.Logging;
 using Microsoft.OData.Edm;
 using OdataAPI.Controllers;
 using OdataAPI.Data;
+using Microsoft.OData;
+using Microsoft.OData.ModelBuilder;
 
 namespace OdataAPI
 {
@@ -39,7 +40,9 @@ namespace OdataAPI
         {
             services.AddDbContext<TestDbContext>(opt => opt.UseInMemoryDatabase("Test"));
 
-            services.AddControllers(mvcOptions => mvcOptions.EnableEndpointRouting = false);
+            services.AddControllers(
+                //mvcOptions => mvcOptions.EnableEndpointRouting = false
+                );
 
             services.AddCors(options =>
             {
@@ -56,7 +59,10 @@ namespace OdataAPI
             });
 
             services.AddOData();
-            services.AddODataQueryFilter();
+
+            services.AddOData(opt => opt.Count().Filter().Expand().Select().OrderBy().SetMaxTop(20)
+                .AddModel("odata", GetEdmModel(), builder => builder.AddService<ODataBatchHandler, DefaultODataBatchHandler>(Microsoft.OData.ServiceLifetime.Singleton))
+                );
 
         }
 
@@ -89,13 +95,17 @@ namespace OdataAPI
 
             app.UseCors();
 
-            app.UseMvc(routes =>
-            {
-                routes.Select().Expand().Filter().OrderBy().MaxTop(null).Count().EnableContinueOnErrorHeader();
-                routes.MapODataServiceRoute("odata", "odata", GetEdmModel(), new DefaultODataBatchHandler());
-                routes.EnableDependencyInjection();
-            });
+            //app.UseMvc(routes =>
+            //{
+            //    routes.Select().Expand().Filter().OrderBy().MaxTop(null).Count().EnableContinueOnErrorHeader();
+            //    routes.MapODataServiceRoute("odata", "odata", GetEdmModel(), new DefaultODataBatchHandler());
+            //    routes.EnableDependencyInjection();
+            //});
 
+            app.UseEndpoints(endpoints =>
+            {
+                endpoints.MapControllers();
+            });
 
             using (var serviceScope = app.ApplicationServices.GetRequiredService<IServiceScopeFactory>().CreateScope())
             {
@@ -121,8 +131,8 @@ namespace OdataAPI
         IEdmModel GetEdmModel()
         {
             var odataBuilder = new ODataConventionModelBuilder();
-            odataBuilder.EntitySet<Product>("Products").EntityType.Filter().Count().Expand().OrderBy().Page().Select(); 
-            odataBuilder.EntitySet<Supplier>("Suppliers").EntityType.Filter().Count().Expand().OrderBy().Page().Select(); ;
+            odataBuilder.EntitySet<Product>("Products"); 
+            odataBuilder.EntitySet<Supplier>("Suppliers");
 
             odataBuilder.Namespace = "ProductService";
             odataBuilder.EntityType<Product>().Action("Rate").Parameter<int>("Rating");
