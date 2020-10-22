@@ -77,6 +77,7 @@ namespace OdataAPI
             // app.UseHttpsRedirection();
             app.UseODataBatching();
 
+
             app.UseRouting();
 
             app.UseForwardedHeaders(new ForwardedHeadersOptions
